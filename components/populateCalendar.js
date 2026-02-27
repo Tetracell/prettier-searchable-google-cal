@@ -1,3 +1,5 @@
+import tippy from 'tippy.js';
+
 // await --- before we can continue, we have to wait for the response from another computer/the server
 //res = response
 async function populateGoogleCal() {
@@ -129,10 +131,20 @@ function AssignCalEvents(res) {
       eventEl.innerHTML = `
             <div class="event-summary"><a href="${event.htmlLink}" target="_blank"><strong>${event.summary}</strong></a></div>
             <div class="event-time">${startTime} - ${endTime}</div>
-            <div class="event-description">${event.description}</div>
           `;
-      //  <div class="event-description">${event.description}</div>
       cell.appendChild(eventEl);
+      
+      // Attach Tippy tooltip with description on click
+      if (event.description) {
+        tippy(eventEl, {
+          content: event.description || 'No description available',
+          trigger: 'click',
+          placement: 'right',
+          theme: 'light',
+          interactive: true,
+          maxWidth: 300
+        });
+      }
     }
   });
 }
