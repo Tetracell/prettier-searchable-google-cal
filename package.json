@@ -6,6 +6,7 @@
     "@popperjs/core": "^2.11.8",
     "@vercel/edge": "^0.1.2",
     "googleapis": "^171.4.0",
+    "pnpm": "^10.30.3",
     "tippy.js": "^6.3.7"
   }
 }
