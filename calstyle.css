@@ -392,10 +392,11 @@ margin-bottom:1rem
             transition: max-height 0.8s ease;
         }
 
+        
+        /** Removing this to start testing Tippy tooltips instead of expanding descriptions on click
         .event-item:hover .event-description {
-            max-height: 500px; /* Expand to a large height (adjust as needed for content) */
-
-        }
+            max-height: 500px; Expand to a large height (adjust as needed for content)
+        }  */      
 
         /** end event styling */
         
