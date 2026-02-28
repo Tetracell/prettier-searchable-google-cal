@@ -30,7 +30,7 @@ function AssignCalEvents(res) {
 
   const thisMonthsEvents = res;
 
-  // Helper to decide a CSS category class based on the event title
+  /** Helper to decide a CSS category class based on the event title */
   function getCategoryClass(summary) {
     if (!summary) return "";
     const s = summary.toLowerCase();
