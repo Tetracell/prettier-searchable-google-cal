@@ -95,9 +95,10 @@
   <div id="rR"></div>
   <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
   <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
-  <script>addEventListener("DOMContentLoaded", function () {
+  <script>
+    addEventListener("DOMContentLoaded", function () {
       addEventListener("click", function (e) {
-        if (e.target.classList.contains("event")) {
+        if (e.target.classList.contains("event-description")) {
           const eventId = e.target.getAttribute("data-event-id");
           const eventData = getEventDataById(eventId);
           tippy(e.target, {
