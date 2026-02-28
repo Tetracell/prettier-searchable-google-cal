@@ -100,7 +100,7 @@
       addEventListener("click", function (e) {
         if (e.target.classList.contains("event-item")) {
           const eventId = e.target.getAttribute("data-event-id");
-          const eventData = getEventDataById(eventId);
+          const eventData = document.getElementById(eventId);
           tippy(e.target, {
             content: `<strong>${eventData.title}</strong><br>${eventData.date}<br>${eventData.description}`,
             allowHTML: true,
