@@ -102,7 +102,7 @@
           const eventId = e.target.getAttribute("data-event-id");
           const eventData = document.getElementById(eventId);
           tippy(e.target, {
-            content: `<strong>${eventData.title}</strong><br>${eventData.date}<br>${eventData.description}`,
+            content: `<strong>${eventData.summary}</strong><br>${eventData.date}<br>${eventData.description}`,
             allowHTML: true,
             placement: "top",
             theme: "light-border",
