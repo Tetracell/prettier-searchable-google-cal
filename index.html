@@ -93,6 +93,22 @@
 
   </p>
   <div id="rR"></div>
+  <script src="./node_modules/tippy.js">
+    addEventListener("DOMContentLoaded", function () {
+      addEventListener("click", function (e) {
+        if (e.target.classList.contains("event")) {
+          const eventId = e.target.getAttribute("data-event-id");
+          const eventData = getEventDataById(eventId);
+          tippy(e.target, {
+            content: `<strong>${eventData.title}</strong><br>${eventData.date}<br>${eventData.description}`,
+            allowHTML: true,
+            placement: "top",
+            theme: "light-border",
+          }).show();
+        }
+      });
+    })
+  </script>
   <script src="./components/calendarview.js"></script>
   <!-- month/year dropdown population moved into DOMContentLoaded handler above -->
 </body>
