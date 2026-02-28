@@ -124,7 +124,7 @@ function AssignCalEvents(res) {
       // apply category-specific class if one is determined
       const cat = getCategoryClass(event.summary);
       if (cat) {
-        eventEl.classList.add(cat);
+        eventEl.id = cat; // for filtering and style so I can use the classname;
       }
       eventEl.innerHTML = `
             <div class="event-summary"><a href="${event.htmlLink}" target="_blank"><strong>${event.summary}</strong></a></div>
