@@ -127,9 +127,9 @@ function AssignCalEvents(res) {
         eventEl.classList.add(cat);
       }
       eventEl.innerHTML = `
-            <div class="event-item event-summary"><a href="${event.htmlLink}" target="_blank"><strong>${event.summary}</strong></a></div>
-            <div class="event-item event-time">${startTime} - ${endTime}</div>
-            <div class="event-item event-description">${event.description}</div>
+            <div class="event-summary"><a href="${event.htmlLink}" target="_blank"><strong>${event.summary}</strong></a></div>
+            <div class="event-time">${startTime} - ${endTime}</div>
+            <div class="event-description">${event.description}</div>
           `;
       //  <div class="event-description">${event.description}</div>
       cell.appendChild(eventEl);
