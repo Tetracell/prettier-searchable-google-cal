@@ -1,5 +1,6 @@
 // await --- before we can continue, we have to wait for the response from another computer/the server
 //res = response
+
 async function populateGoogleCal() {
   var selectMonth = document.getElementById("month");
   var selectYear = document.getElementById("year");
@@ -82,7 +83,7 @@ function AssignCalEvents(res) {
     ) {
       return "intergen"; // event is for all ages
     }
-    return "";
+    return "intergen"; // default to intergen if no specific category is found
   }
 
   // Clear previous events from calendar cells
@@ -127,11 +128,13 @@ function AssignCalEvents(res) {
         eventEl.classList.add(cat);
       }
       eventEl.innerHTML = `
-            <div class="event-summary"><a href="${event.htmlLink}" target="_blank"><strong>${event.summary}</strong></a></div>
+            <div class="event-summary"><strong>${event.summary}</strong></div>
             <div class="event-time">${startTime} - ${endTime}</div>
             <div class="event-description">${event.description}</div>
           `;
       //  <div class="event-description">${event.description}</div>
+      //  <a href="${event.htmlLink}" target="_blank"> - from the event summary
+      // onclick="console.log(this.parentElement.className)
       cell.appendChild(eventEl);
     }
   });
@@ -206,11 +209,10 @@ function searchCal() {
     // category toggles (hide when checked)
     if (visible) {
       if (hideDol.babies && el.classList.contains("babies")) visible = false;
-      if (hideDol.kids && el.classList === "kids") visible = false;
+      if (hideDol.kids && el.classList.contains("kids")) visible = false;
       if (hideDol.tweens && el.classList.contains("tweens")) visible = false;
       if (hideDol.teens && el.classList.contains("teens")) visible = false;
-      if (hideDol.intergen && el.classList.contains("intergen"))
-        visible = false;
+      if (hideDol.intergen && el.classList.contains("intergen")) visible = false;
     }
     el.style.display = visible ? "" : "none";
   });

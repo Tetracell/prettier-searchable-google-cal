@@ -95,30 +95,38 @@
   <div id="rR"></div>
   <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
   <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
- 
- <script>
-    addEventListener("click", function (e) {
-      if (e.target.classList===("event-item")) {
-        const eventId = e.target.getAttribute("dateId");
-        const eventData = document.getElementById(eventId);
-        tippy(e.target, {
-          content: `<strong>${eventData.summary}</strong > <br>${eventData.date}<br>${eventData.description}`,
-          allowHTML: true,
-          placement: "top",
-          theme: "light-border",
-        }).show();
-      }
-    });
-  </script>
-
-  <script>
-    addEventListener("click", function (e) {
-      console.log("Clicked element:", e.target);
-      console.log(e.target.classList);
-    })
-  </script>
   <script src="./components/calendarview.js"></script>
   <!-- month/year dropdown population moved into DOMContentLoaded handler above -->
+
+  <!-- <script>
+    addEventListener("click", function (e) {
+      console.log("Clicked element:", e.target);
+      console.log("Parent element:",e.target.parentElement.parentElement.className);
+      const description = e.target.parentElement.parentElement.querySelector(".event-description")?.textContent;
+      console.log("Event Description:", description); 
+    })
+  </script> -->
+
+  <script>
+    let summary;
+    let description;
+    addEventListener("click", function (e) {
+      if (e.target.classList.contains("event-summary")) {
+        summary = e.target.parentElement.parentElement.querySelector(".event-summary")?.textContent;
+        description = e.target.parentElement.parentElement.querySelector(".event-description")?.textContent;
+        console.log("Event Summary:", summary);
+        console.log("Event Description:", description);
+        tippy("strong", {
+          content: description || "No description available",
+          allowHTML: true,
+          trigger: "click",
+          theme: "light-border",
+          placement: "top",
+          animation: "scale"
+        })
+      };
+    });  
+  </script>
 </body>
 
 </html>

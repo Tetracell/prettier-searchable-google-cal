@@ -346,12 +346,12 @@ margin-bottom:1rem
         }
 
         /* modifiers for categories/age groups */
-        #babies { background-color: var(--t-b-5-age); border-left-color: var(--accentb-5-age); }
-        #teens { background-color: var(--t-16up-age); border-left-color: var(--accent16up-age); }
-        #kids { background-color: var(--t-6-11-age); border-left-color: var(--accent6-11-age); }
-        #tweens { background-color: var(--t-12-16-age); border-left-color: var(--accent12-16-age); }
-        #adult { background-color: var(--t-18up-age); border-left-color: var(--accent18up-age); }
-        #intergen { background-color: var(--t-intergen); border-left-color: var(--accentintergen); }
+        .babies { background-color: var(--t-b-5-age); border-left-color: var(--accentb-5-age); }
+        .teens { background-color: var(--t-16up-age); border-left-color: var(--accent16up-age); }
+        .kids { background-color: var(--t-6-11-age); border-left-color: var(--accent6-11-age); }
+        .tweens { background-color: var(--t-12-16-age); border-left-color: var(--accent12-16-age); }
+        .adult { background-color: var(--t-18up-age); border-left-color: var(--accent18up-age); }
+        .intergen { background-color: var(--t-intergen); border-left-color: var(--accentintergen); }
         /* add other category classes as needed */
 
 
@@ -362,6 +362,12 @@ margin-bottom:1rem
             line-height: 1.2;
             margin-bottom: 0.3rem;
             word-wrap: break-word;
+        }
+
+        .event-summary :hover {
+            text-decoration: underline;
+            color: #437a45;
+            cursor: pointer;
         }
 
         .event-summary a {
