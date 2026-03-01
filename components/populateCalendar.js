@@ -121,7 +121,7 @@ function AssignCalEvents(res) {
       // Create event container
       const eventEl = document.createElement("div");
       eventEl.className = "event-item";
-      // apply category-specific class if one is determined
+      // apply category-specific id if one is determined
       const cat = getCategoryClass(event.summary);
       if (cat) {
         eventEl.id = cat; // for filtering and style so I can use the classname;
@@ -185,7 +185,8 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-// filter events based on search box and demographic toggles
+/** Filter events based on search box and demographic toggles. Now changed
+ * to work with the new category classes and ids, and to be more efficient by combining all filters into one loop. */
 function searchCal() {
   const query = document.getElementById("myInput").value.toLowerCase();
   const hideDol = {
@@ -204,12 +205,11 @@ function searchCal() {
     }
     // category toggles (hide when checked)
     if (visible) {
-      if (hideDol.babies && el.classList.contains("babies")) visible = false;
-      if (hideDol.kids && el.classList.contains("kids")) visible = false;
-      if (hideDol.tweens && el.classList.contains("tweens")) visible = false;
-      if (hideDol.teens && el.classList.contains("teen")) visible = false;
-      if (hideDol.intergen && el.classList.contains("intergen"))
-        visible = false;
+      if (hideDol.babies && el.id === "babies") visible = false;
+      if (hideDol.kids && el.id === "kids") visible = false;
+      if (hideDol.tweens && el.id === "tweens") visible = false;
+      if (hideDol.teens && el.id === "teens") visible = false;
+      if (hideDol.intergen && el.id === "intergen") visible = false;
     }
     el.style.display = visible ? "" : "none";
   });
