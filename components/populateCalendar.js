@@ -40,7 +40,7 @@ function AssignCalEvents(res) {
       s.includes("for teens") ||
       s.includes("teen tournament")
     ) {
-      return "teen"; // event is for teens
+      return "teens"; // event is for teens
     }
     if (
       s.includes("let's play tuesdays") ||
