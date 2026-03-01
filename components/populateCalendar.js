@@ -124,12 +124,12 @@ function AssignCalEvents(res) {
       // apply category-specific id if one is determined
       const cat = getCategoryClass(event.summary);
       if (cat) {
-        eventEl.id = cat; // for filtering and style so I can use the classname;
+        eventEl.classList.add(cat);
       }
       eventEl.innerHTML = `
-            <div class="event-summary"><a href="${event.htmlLink}" target="_blank"><strong>${event.summary}</strong></a></div>
-            <div class="event-time">${startTime} - ${endTime}</div>
-            <div class="event-description">${event.description}</div>
+            <div class="event-item event-summary"><a href="${event.htmlLink}" target="_blank"><strong>${event.summary}</strong></a></div>
+            <div class="event-item event-time">${startTime} - ${endTime}</div>
+            <div class="event-item event-description">${event.description}</div>
           `;
       //  <div class="event-description">${event.description}</div>
       cell.appendChild(eventEl);
@@ -205,11 +205,12 @@ function searchCal() {
     }
     // category toggles (hide when checked)
     if (visible) {
-      if (hideDol.babies && el.id === "babies") visible = false;
-      if (hideDol.kids && el.id === "kids") visible = false;
-      if (hideDol.tweens && el.id === "tweens") visible = false;
-      if (hideDol.teens && el.id === "teens") visible = false;
-      if (hideDol.intergen && el.id === "intergen") visible = false;
+      if (hideDol.babies && el.classList.contains("babies")) visible = false;
+      if (hideDol.kids && el.classList === "kids") visible = false;
+      if (hideDol.tweens && el.classList.contains("tweens")) visible = false;
+      if (hideDol.teens && el.classList.contains("teens")) visible = false;
+      if (hideDol.intergen && el.classList.contains("intergen"))
+        visible = false;
     }
     el.style.display = visible ? "" : "none";
   });
