@@ -83,6 +83,7 @@ function AssignCalEvents(res) {
     ) {
       return "intergen"; // event is for all ages
     }
+    initTooltips();
     return "intergen"; // default to intergen if no specific category is found
   }
 
@@ -213,7 +214,8 @@ function searchCal() {
       if (hideDol.kids && el.classList.contains("kids")) visible = false;
       if (hideDol.tweens && el.classList.contains("tweens")) visible = false;
       if (hideDol.teens && el.classList.contains("teens")) visible = false;
-      if (hideDol.intergen && el.classList.contains("intergen")) visible = false;
+      if (hideDol.intergen && el.classList.contains("intergen"))
+        visible = false;
     }
     el.style.display = visible ? "" : "none";
   });

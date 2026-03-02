@@ -91,68 +91,46 @@
   </div>
   <!--<button name="jump" onclick="jump()">Go</button>-->
 
-  <script src="./components/populateCalendar.js"></script>
 
   </p>
   <div id="rR"></div>
+
   <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
   <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
   <script src="./components/calendarview.js"></script>
-  <script type="module" src="./components/tippyDisplay.js"></script>
   <!-- month/year dropdown population moved into DOMContentLoaded handler above -->
 
-  <!-- <script>
-    addEventListener("click", function (e) {
-      console.log("Clicked element:", e.target);
-      console.log("Parent element:",e.target.parentElement.parentElement.className);
-      const description = e.target.parentElement.parentElement.querySelector(".event-description")?.textContent;
-      console.log("Event Description:", description); 
-    })
-  </script> -->
-
   <script>
-    document.onmouseover = function (e) {
+    function initTooltips() {
+      document.querySelectorAll('.event-summary:not([data-tippy-initialized])').forEach(el => {
+        el.setAttribute('data-tippy-initialized', 'true');
+        el.style.cursor = 'pointer';
+        el.style.textDecoration = 'underline';
 
-      if (e.target.classList.contains("event-summary")) {
-        console.log("I have entered the if statement");
-        document.querySelector = e.target.style.cursor = "pointer"; document.querySelector = e.target.style.textDecoration = "underline";
-
-        let summary = e.target.parentElement.querySelector(".event-summary")?.textContent;
-        let time = e.target.parentElement.querySelector(".event-time")?.textContent;
-        let description = e.target.parentElement.querySelector(".event-description")?.textContent;
-
-        tippy('.event-summary', {
+        tippy(el, {
           allowHTML: true,
-          content: `<div class="tooltip-summary"><strong>${summary}</strong></div><div class="tooltip-time">${time}</div><div class="tooltip-description">${description}</div>`,
+          content(reference) {
+            const parent = reference.parentElement;
+            const summary = parent.querySelector('.event-summary')?.textContent;
+            const time = parent.querySelector('.event-time')?.textContent;
+            const description = parent.querySelector('.event-description')?.textContent;
+
+            return `
+              <div class="tooltip-summary"><strong>${summary}</strong></div>
+              <div class="tooltip-time">${time}</div>
+              <div class="tooltip-description">${description}</div>
+              `;
+          },
           theme: 'light-border',
           placement: 'top',
           animation: 'scale',
-          trigger: 'click'
+          trigger: 'click',
         });
-      }
-    };
+      });
+    }
 
-
-
-    /* let summary;
-    let description;
-    addEventListener("click", function (e) {
-      if (e.target.parentElement.classList.contains("event-summary")) {
-        summary = e.target.parentElement.parentElement.querySelector(".event-summary")?.textContent;
-        description = e.target.parentElement.parentElement.querySelector(".event-description")?.textContent;
-        console.log("Event Summary:", summary);
-        console.log("Event Description:", description);
-        tippy("strong", {
-          content: description || "No description available",
-          allowHTML: true,
-          trigger: "click",
-          theme: "light-border",
-          placement: "top",
-          animation: "scale"
-        })
-      };
-    });   */
   </script>
+  <script src="./components/populateCalendar.js"></script>
 </body>
 
 </html>
