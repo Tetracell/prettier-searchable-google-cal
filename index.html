@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://apis.google.com/js/api.js"></script>
   <link rel="stylesheet" href="calstyle.css" />
+  <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/scale.css" />
+  <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/themes/light-border.css" />
   <title>Derby Neck Library Calendar Project</title>
   <meta name="description"
     content="Developing an application to display a prettier calendar for the Derby Neck Library." />
@@ -96,6 +98,7 @@
   <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
   <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
   <script src="./components/calendarview.js"></script>
+  <script type="module" src="./components/tippyDisplay.js"></script>
   <!-- month/year dropdown population moved into DOMContentLoaded handler above -->
 
   <!-- <script>
@@ -108,7 +111,30 @@
   </script> -->
 
   <script>
-    let summary;
+    document.onmouseover = function (e) {
+
+      if (e.target.classList.contains("event-summary")) {
+        console.log("I have entered the if statement");
+        document.querySelector = e.target.style.cursor = "pointer"; document.querySelector = e.target.style.textDecoration = "underline";
+
+        let summary = e.target.parentElement.querySelector(".event-summary")?.textContent;
+        let time = e.target.parentElement.querySelector(".event-time")?.textContent;
+        let description = e.target.parentElement.querySelector(".event-description")?.textContent;
+
+        tippy('.event-summary', {
+          allowHTML: true,
+          content: `<div class="tooltip-summary"><strong>${summary}</strong></div><div class="tooltip-time">${time}</div><div class="tooltip-description">${description}</div>`,
+          theme: 'light-border',
+          placement: 'top',
+          animation: 'scale',
+          trigger: 'click'
+        });
+      }
+    };
+
+
+
+    /* let summary;
     let description;
     addEventListener("click", function (e) {
       if (e.target.parentElement.classList.contains("event-summary")) {
@@ -125,7 +151,7 @@
           animation: "scale"
         })
       };
-    });  
+    });   */
   </script>
 </body>
 
