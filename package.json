@@ -4,6 +4,6 @@
   "type": "module",
   "dependencies": {
     "@vercel/edge": "^0.1.2",
-    "googleapis": "^171.4.0",
+    "googleapis": "^171.4.0"
   }
 }
