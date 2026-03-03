@@ -1,5 +1,3 @@
-import createTippyTooltip from "./tippyTooltip.js";
-
 // await --- before we can continue, we have to wait for the response from another computer/the server
 //res = response
 
