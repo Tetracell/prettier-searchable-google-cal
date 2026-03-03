@@ -566,6 +566,12 @@ margin-bottom:1rem
             content: '✓';
         }
 
+        .tooltip-summary {
+            font-size : 20px;
+            font-weight : 500;
+            text-decoration: underline;;
+        }
+
         /* if you'd rather reveal the native checkbox itself, comment out the opacity/size rules above */
         /*
         .switch input { 

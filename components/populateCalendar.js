@@ -122,7 +122,6 @@ function AssignCalEvents(res) {
     if (cell) {
       // Create event container
       const eventEl = document.createElement("div");
-      eventEl.id = dateId;
       eventEl.className = "event-item";
       // apply category-specific id if one is determined
       const cat = getCategoryClass(event.summary);

@@ -102,10 +102,14 @@
 
   <script>
     function initTooltips() {
-      document.querySelectorAll('.event-summary:not([data-tippy-initialized])').forEach(el => {
-        el.setAttribute('data-tippy-initialized', 'true');
+      document.querySelectorAll('.event-summary').forEach(el => {
         el.style.cursor = 'pointer';
         el.style.textDecoration = 'underline';
+
+        // If this element already has a tippy instance, destroy it first
+        if (el._tippy) {
+          el._tippy.destroy();
+        }
 
         tippy(el, {
           allowHTML: true,
@@ -116,10 +120,10 @@
             const description = parent.querySelector('.event-description')?.textContent;
 
             return `
-              <div class="tooltip-summary"><strong>${summary}</strong></div>
-              <div class="tooltip-time">${time}</div>
-              <div class="tooltip-description">${description}</div>
-              `;
+          <div class="tooltip-summary"><strong>${summary}</strong></div>
+          <div class="tooltip-time">${time}</div>
+          <div class="tooltip-description">${description}</div>
+        `;
           },
           theme: 'light-border',
           placement: 'top',
