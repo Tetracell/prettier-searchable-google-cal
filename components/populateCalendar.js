@@ -83,7 +83,17 @@ function AssignCalEvents(res) {
     ) {
       return "intergen"; // event is for all ages
     }
-    initTooltips();
+    /**
+     * requestAnimationFrame (rAF) is a browser API that says "run this callback right before the next visual repaint." It essentially lets you tap into the browser's rendering pipeline.
+     * First rAF — waits for the browser to finish processing the current batch of DOM changes and prepares for the next paint
+     * Second rAF — waits for the paint itself to fully complete
+     * By the time the second callback fires, the browser has fully committed every appendChild to the DOM, so querySelectorAll sees all 60 elements instead of just the first 50-ish.
+     */
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        initTooltips();
+      });
+    });
     return "intergen"; // default to intergen if no specific category is found
   }
 

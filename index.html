@@ -117,11 +117,12 @@
             const parent = reference.parentElement;
             const summary = parent.querySelector('.event-summary')?.textContent;
             const time = parent.querySelector('.event-time')?.textContent;
-            const description = parent.querySelector('.event-description')?.textContent;
+            const description = parent.querySelector('.event-description')?.innerHTML;
 
             return `
-          <div class="tooltip-summary"><strong>${summary}</strong></div>
+          <div class="tooltip-summary">${summary}</div>
           <div class="tooltip-time">${time}</div>
+          <hr />
           <div class="tooltip-description">${description}</div>
         `;
           },
@@ -129,6 +130,7 @@
           placement: 'top',
           animation: 'scale',
           trigger: 'click',
+          interactive: true,
         });
       });
     }
