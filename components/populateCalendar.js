@@ -1,3 +1,5 @@
+import createTippyTooltip from "./tippyTooltip.js";
+
 // await --- before we can continue, we have to wait for the response from another computer/the server
 //res = response
 
@@ -23,7 +25,7 @@ async function populateGoogleCal() {
     document.getElementById("rR").textContent =
       "Sorry, Sarah. You messed up! Error loading calendar: " + error.message;
   }
-}
+};
 
 function AssignCalEvents(res) {
   // Logic to assign calendar events to the calendar view goes here
@@ -154,7 +156,7 @@ function AssignCalEvents(res) {
 
 // after inserting all events, apply filters in case toggles/search are active
 if (typeof searchCal === "function") {
-  searchCal();
+  window.searchCal();
 }
 
 // Wait for DOM to be fully loaded before calling
@@ -189,13 +191,13 @@ document.addEventListener("DOMContentLoaded", function () {
   monthSelect.value = today.getMonth();
   yearSelect.value = today.getFullYear();
 
-  populateGoogleCal();
+  window.populateGoogleCal();
 
   // setup toggle listeners so any change will re-run filtering
   ["babies", "kids", "tweens", "teens", "intergen"].forEach((cat) => {
     const checkbox = document.querySelector(`#${cat}-toggle input`);
     if (checkbox) {
-      checkbox.addEventListener("change", searchCal);
+      checkbox.addEventListener("change", window.searchCal);
     }
   });
 });
