@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://apis.google.com/js/api.js"></script>
   <link rel="stylesheet" href="calstyle.css" />
+  <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/scale.css" />
+  <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/themes/light-border.css" />
   <title>Derby Neck Library Calendar Project</title>
   <meta name="description"
     content="Developing an application to display a prettier calendar for the Derby Neck Library." />
@@ -13,6 +15,8 @@
 
 <body>
   <h1 id="Header">Derby Neck Library Calendar Project</h1>
+  <h2>An original creation of Sarah Zareski</h2>
+  <h5>Butchered and otherwise mutilated by Tom LaTulipe</h5>
   <div class="container mt-5">
     <div class="layout">
       <div class="card">
@@ -89,12 +93,52 @@
   </div>
   <!--<button name="jump" onclick="jump()">Go</button>-->
 
-  <script type="module" src="./components/populateCalendar.js"></script>
 
   </p>
   <div id="rR"></div>
+
+  <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+  <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
   <script src="./components/calendarview.js"></script>
   <!-- month/year dropdown population moved into DOMContentLoaded handler above -->
+
+  <script>
+    function initTooltips() {
+      document.querySelectorAll('.event-summary').forEach(el => {
+        el.style.cursor = 'pointer';
+        el.style.textDecoration = 'underline';
+
+        // If this element already has a tippy instance, destroy it first
+        if (el._tippy) {
+          el._tippy.destroy();
+        }
+
+        tippy(el, {
+          allowHTML: true,
+          content(reference) {
+            const parent = reference.parentElement;
+            const summary = parent.querySelector('.event-summary')?.textContent;
+            const time = parent.querySelector('.event-time')?.textContent;
+            const description = parent.querySelector('.event-description')?.innerHTML;
+
+            return `
+          <div class="tooltip-summary">${summary}</div>
+          <div class="tooltip-time">${time}</div>
+          <hr />
+          <div class="tooltip-description">${description}</div>
+        `;
+          },
+          theme: 'light-border',
+          placement: 'top',
+          animation: 'scale',
+          trigger: 'click',
+          interactive: true,
+        });
+      });
+    }
+
+  </script>
+  <script src="./components/populateCalendar.js"></script>
 </body>
 
 </html>

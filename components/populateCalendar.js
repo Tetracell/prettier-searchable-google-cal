@@ -2,7 +2,8 @@ import createTippyTooltip from "./tippyTooltip.js";
 
 // await --- before we can continue, we have to wait for the response from another computer/the server
 //res = response
-window.populateGoogleCal = async function populateGoogleCal() {
+
+async function populateGoogleCal() {
   var selectMonth = document.getElementById("month");
   var selectYear = document.getElementById("year");
 
@@ -32,7 +33,7 @@ function AssignCalEvents(res) {
 
   const thisMonthsEvents = res;
 
-  // Helper to decide a CSS category class based on the event title
+  /** Helper to decide a CSS category class based on the event title */
   function getCategoryClass(summary) {
     if (!summary) return "";
     const s = summary.toLowerCase();
@@ -42,7 +43,7 @@ function AssignCalEvents(res) {
       s.includes("for teens") ||
       s.includes("teen tournament")
     ) {
-      return "teen"; // event is for teens
+      return "teens"; // event is for teens
     }
     if (
       s.includes("let's play tuesdays") ||
@@ -84,7 +85,7 @@ function AssignCalEvents(res) {
     ) {
       return "intergen"; // event is for all ages
     }
-    return "";
+    return "intergen"; // default to intergen if no specific category is found
   }
 
   // Clear previous events from calendar cells
@@ -103,6 +104,18 @@ function AssignCalEvents(res) {
     const month = String(startDateTime.getMonth() + 1).padStart(2, "0");
     const day = String(startDateTime.getDate()).padStart(2, "0");
     const dateId = `date-${year}-${month}-${day}`;
+
+    /**
+     * requestAnimationFrame (rAF) is a browser API that says "run this callback right before the next visual repaint." It essentially lets you tap into the browser's rendering pipeline.
+     * First rAF — waits for the browser to finish processing the current batch of DOM changes and prepares for the next paint
+     * Second rAF — waits for the paint itself to fully complete
+     * By the time the second callback fires, the browser has fully committed every appendChild to the DOM, so querySelectorAll sees all 60 elements instead of just the first 50-ish.
+     */
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        initTooltips();
+      });
+    });
 
     // Extract and format times
     const startTime = startDateTime.toLocaleTimeString("en-US", {
@@ -123,22 +136,19 @@ function AssignCalEvents(res) {
       // Create event container
       const eventEl = document.createElement("div");
       eventEl.className = "event-item";
-      // apply category-specific class if one is determined
+      // apply category-specific id if one is determined
       const cat = getCategoryClass(event.summary);
       if (cat) {
         eventEl.classList.add(cat);
       }
       eventEl.innerHTML = `
-            <div class="event-summary"><a href="${event.htmlLink}" target="_blank"><strong>${event.summary}</strong></a></div>
+            <div class="event-summary">${event.summary}</div>
             <div class="event-time">${startTime} - ${endTime}</div>
             <div class="event-description">${event.description}</div>
           `;
       //  <div class="event-description">${event.description}</div>
-
-      // Add tooltip if description exists
-      if (event.description) {
-        createTippyTooltip(eventEl, event.description);
-      }
+      //  <a href="${event.htmlLink}" target="_blank"> - from the event summary
+      // onclick="console.log(this.parentElement.className)
       cell.appendChild(eventEl);
     }
   });
@@ -192,8 +202,9 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-// filter events based on search box and demographic toggles
-window.searchCal = function searchCal() {
+/** Filter events based on search box and demographic toggles. Now changed
+ * to work with the new category classes and ids, and to be more efficient by combining all filters into one loop. */
+function searchCal() {
   const query = document.getElementById("myInput").value.toLowerCase();
   const hideDol = {
     babies: document.querySelector("#babies-toggle input").checked,
@@ -214,10 +225,11 @@ window.searchCal = function searchCal() {
       if (hideDol.babies && el.classList.contains("babies")) visible = false;
       if (hideDol.kids && el.classList.contains("kids")) visible = false;
       if (hideDol.tweens && el.classList.contains("tweens")) visible = false;
-      if (hideDol.teens && el.classList.contains("teen")) visible = false;
+      if (hideDol.teens && el.classList.contains("teens")) visible = false;
       if (hideDol.intergen && el.classList.contains("intergen"))
         visible = false;
     }
     el.style.display = visible ? "" : "none";
   });
-};
+  initTooltips(); // re-initialize tooltips to account for hidden events
+}
