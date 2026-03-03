@@ -117,7 +117,7 @@
           allowHTML: true,
           content(reference) {
             const parent = reference.parentElement;
-            const summary = parent.querySelector('.event-summary')?.textContent;
+            const summary = parent.querySelector('.event-summary')?.innerHTML;
             const time = parent.querySelector('.event-time')?.textContent;
             const description = parent.querySelector('.event-description')?.innerHTML;
 
