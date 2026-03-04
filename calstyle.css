@@ -116,9 +116,7 @@ select {
   font-family: var(--nc-font-sans);
 }
 body {
-  margin: 0 auto;
-  width: 90%;
-  max-width: 1400px;
+  width: 100%;
   padding: 2rem;
   border-radius: 6px;
   overflow-x: hidden;
