@@ -1,3 +1,5 @@
+const eventLinkMap = new Map();
+
 // await --- before we can continue, we have to wait for the response from another computer/the server
 //res = response
 
@@ -130,6 +132,7 @@ function AssignCalEvents(res) {
     if (cell) {
       const eventEl = document.createElement("div");
       eventEl.className = "event-item";
+      eventLinkMap.set(eventEl, event.htmlLink); // Store the event's HTML link in the map for later retrieval
       if (cat) eventEl.classList.add(cat);
       eventEl.innerHTML = `
         <div class="event-summary">${event.summary}</div>
@@ -141,19 +144,19 @@ function AssignCalEvents(res) {
 
     // ── Collect for mobile ──
     parsedEvents.push({
-      summary:     event.summary || "(Untitled)",
+      summary: event.summary || "(Untitled)",
       startDateTime,
       endDateTime,
-      timeRange:   `${startTime} – ${endTime}`,
+      timeRange: `${startTime} – ${endTime}`,
       description: event.description || "",
-      htmlLink:    event.htmlLink || null,
-      category:    cat,
-      dateKey:     `${year}-${month}-${day}`,  // YYYY-MM-DD for grouping
+      htmlLink: event.htmlLink || null,
+      category: cat,
+      dateKey: `${year}-${month}-${day}`, // YYYY-MM-DD for grouping
     });
   });
 
   // ── Build mobile list view ──
-  window._lastParsedEvents = parsedEvents;  // cache for view toggle
+  window._lastParsedEvents = parsedEvents; // cache for view toggle
   buildMobileView(parsedEvents);
 
   // after inserting all events, apply filters in case toggles/search are active
@@ -180,11 +183,11 @@ function buildMobileView(events) {
   }
 
   // Sync active button state
-  const mode = window.mobileViewMode || 'upcoming';
-  const btnUpcoming = document.getElementById('btn-upcoming');
-  const btnFull = document.getElementById('btn-full');
-  if (btnUpcoming) btnUpcoming.classList.toggle('active', mode === 'upcoming');
-  if (btnFull) btnFull.classList.toggle('active', mode === 'full');
+  const mode = window.mobileViewMode || "upcoming";
+  const btnUpcoming = document.getElementById("btn-upcoming");
+  const btnFull = document.getElementById("btn-full");
+  if (btnUpcoming) btnUpcoming.classList.toggle("active", mode === "upcoming");
+  if (btnFull) btnFull.classList.toggle("active", mode === "full");
 
   if (events.length === 0) {
     mobileView.innerHTML = `<div class="mobile-empty">No events this month.</div>`;
@@ -196,7 +199,7 @@ function buildMobileView(events) {
 
   let displayEvents = sorted;
 
-  if (mode === 'upcoming') {
+  if (mode === "upcoming") {
     // Collect unique future dateKeys (today or later)
     const todayStart = new Date();
     todayStart.setHours(0, 0, 0, 0);
@@ -220,13 +223,25 @@ function buildMobileView(events) {
     }
   }
 
-  const DAY_NAMES   = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-  const MONTH_NAMES = ["Jan","Feb","Mar","Apr","May","Jun",
-                       "Jul","Aug","Sep","Oct","Nov","Dec"];
+  const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const MONTH_NAMES = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  if (mode === 'upcoming') {
+  if (mode === "upcoming") {
     // Flat day groups, no week labels
     const dayMap = new Map();
     displayEvents.forEach((ev) => {
@@ -237,9 +252,10 @@ function buildMobileView(events) {
       const [yr, mo, dy] = dateKey.split("-").map(Number);
       const dateObj = new Date(yr, mo - 1, dy);
       const isToday = dateObj.getTime() === today.getTime();
-      mobileView.appendChild(buildDayGroup(dateKey, dayEvents, isToday, DAY_NAMES));
+      mobileView.appendChild(
+        buildDayGroup(dateKey, dayEvents, isToday, DAY_NAMES),
+      );
     });
-
   } else {
     // Group by week (Sun-Sat)
     const weekMap = new Map();
@@ -282,7 +298,9 @@ function buildMobileView(events) {
         const [yr, mo, dy] = dateKey.split("-").map(Number);
         const dateObj = new Date(yr, mo - 1, dy);
         const isToday = dateObj.getTime() === today.getTime();
-        weekSection.appendChild(buildDayGroup(dateKey, dayEvents, isToday, DAY_NAMES));
+        weekSection.appendChild(
+          buildDayGroup(dateKey, dayEvents, isToday, DAY_NAMES),
+        );
       });
 
       mobileView.appendChild(weekSection);
@@ -313,7 +331,7 @@ function buildDayGroup(dateKey, dayEvents, isToday, DAY_NAMES) {
     const card = document.createElement("div");
     card.className = `mobile-event-card ${ev.category}`;
     card.dataset.category = ev.category;
-    card.dataset.text     = (ev.summary + " " + ev.description).toLowerCase();
+    card.dataset.text = (ev.summary + " " + ev.description).toLowerCase();
     card.innerHTML = `
       <div class="mobile-event-accent"></div>
       <div class="mobile-event-body">
@@ -332,15 +350,24 @@ function buildDayGroup(dateKey, dayEvents, isToday, DAY_NAMES) {
   return dayGroup;
 }
 
-
 // Wait for DOM to be fully loaded before calling
 document.addEventListener("DOMContentLoaded", function () {
   // populate month dropdown and set default values
   const monthSelect = document.getElementById("month");
-  const yearSelect  = document.getElementById("year");
+  const yearSelect = document.getElementById("year");
   const months = [
-    "January","February","March","April","May","June",
-    "July","August","September","October","November","December",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
 
   months.forEach((month, index) => {
@@ -353,7 +380,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // default to current month/year
   const today = new Date();
   monthSelect.value = today.getMonth();
-  yearSelect.value  = today.getFullYear();
+  yearSelect.value = today.getFullYear();
 
   window.populateGoogleCal();
 
@@ -371,11 +398,11 @@ document.addEventListener("DOMContentLoaded", function () {
 function searchCal() {
   const query = document.getElementById("myInput").value.toLowerCase();
   const hideDol = {
-    babies:  document.querySelector("#babies-toggle input").checked,
-    kids:    document.querySelector("#kids-toggle input").checked,
-    tweens:  document.querySelector("#tweens-toggle input").checked,
-    teens:   document.querySelector("#teens-toggle input").checked,
-    intergen:document.querySelector("#intergen-toggle input").checked,
+    babies: document.querySelector("#babies-toggle input").checked,
+    kids: document.querySelector("#kids-toggle input").checked,
+    tweens: document.querySelector("#tweens-toggle input").checked,
+    teens: document.querySelector("#teens-toggle input").checked,
+    intergen: document.querySelector("#intergen-toggle input").checked,
   };
 
   // ── Desktop events ──
@@ -383,11 +410,12 @@ function searchCal() {
     let visible = true;
     if (query && !el.textContent.toLowerCase().includes(query)) visible = false;
     if (visible) {
-      if (hideDol.babies  && el.classList.contains("babies"))  visible = false;
-      if (hideDol.kids    && el.classList.contains("kids"))    visible = false;
-      if (hideDol.tweens  && el.classList.contains("tweens"))  visible = false;
-      if (hideDol.teens   && el.classList.contains("teens"))   visible = false;
-      if (hideDol.intergen && el.classList.contains("intergen")) visible = false;
+      if (hideDol.babies && el.classList.contains("babies")) visible = false;
+      if (hideDol.kids && el.classList.contains("kids")) visible = false;
+      if (hideDol.tweens && el.classList.contains("tweens")) visible = false;
+      if (hideDol.teens && el.classList.contains("teens")) visible = false;
+      if (hideDol.intergen && el.classList.contains("intergen"))
+        visible = false;
     }
     el.style.display = visible ? "" : "none";
   });
@@ -395,15 +423,15 @@ function searchCal() {
   // ── Mobile event cards ──
   document.querySelectorAll(".mobile-event-card").forEach((card) => {
     let visible = true;
-    const cat  = card.dataset.category || "";
+    const cat = card.dataset.category || "";
     const text = card.dataset.text || "";
 
     if (query && !text.includes(query)) visible = false;
     if (visible) {
-      if (hideDol.babies  && cat === "babies")  visible = false;
-      if (hideDol.kids    && cat === "kids")    visible = false;
-      if (hideDol.tweens  && cat === "tweens")  visible = false;
-      if (hideDol.teens   && cat === "teens")   visible = false;
+      if (hideDol.babies && cat === "babies") visible = false;
+      if (hideDol.kids && cat === "kids") visible = false;
+      if (hideDol.tweens && cat === "tweens") visible = false;
+      if (hideDol.teens && cat === "teens") visible = false;
       if (hideDol.intergen && cat === "intergen") visible = false;
     }
     card.style.display = visible ? "" : "none";
@@ -411,15 +439,17 @@ function searchCal() {
 
   // ── Hide day groups that have no visible cards ──
   document.querySelectorAll(".day-group").forEach((group) => {
-    const anyVisible = [...group.querySelectorAll(".mobile-event-card")]
-      .some((c) => c.style.display !== "none");
+    const anyVisible = [...group.querySelectorAll(".mobile-event-card")].some(
+      (c) => c.style.display !== "none",
+    );
     group.style.display = anyVisible ? "" : "none";
   });
 
   // ── Hide week sections that have no visible day groups ──
   document.querySelectorAll(".week-section").forEach((section) => {
-    const anyVisible = [...section.querySelectorAll(".day-group")]
-      .some((g) => g.style.display !== "none");
+    const anyVisible = [...section.querySelectorAll(".day-group")].some(
+      (g) => g.style.display !== "none",
+    );
     section.style.display = anyVisible ? "" : "none";
   });
 

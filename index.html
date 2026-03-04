@@ -148,10 +148,13 @@
             const summary = parent.querySelector('.event-summary')?.innerHTML;
             const time = parent.querySelector('.event-time')?.textContent;
             const description = parent.querySelector('.event-description')?.innerHTML;
+            const link = eventLinkMap.get(parent) || '#'; // Retrieve the event's HTML link from the map
             return `
-              <div class="tooltip-summary">${summary}</div>
+              <div class="tooltip-summary">
+                <a href="${link}" target="_blank">${summary}</a>                
+              </div>
               <div class="tooltip-time">${time}</div>
-              <hr />
+                <hr />
               <div class="tooltip-description">${description}</div>
             `;
           },
