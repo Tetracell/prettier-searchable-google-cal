@@ -11,16 +11,23 @@
   <title>Derby Neck Library Calendar Project</title>
   <meta name="description"
     content="Developing an application to display a prettier calendar for the Derby Neck Library." />
+
+
 </head>
 
 <body>
   <h1 id="Header">Derby Neck Library Calendar Project</h1>
   <h2>An original creation of Sarah Zareski</h2>
   <h5>Butchered and otherwise mutilated by Tom LaTulipe</h5>
+
   <div class="container mt-5">
     <div class="layout">
       <div class="card">
+
+        <!-- ── Desktop header / nav ── -->
         <h3 class="card-header" id="monthAndYear"></h3>
+
+        <!-- ── Desktop table calendar ── -->
         <table class="table table-bordered table-responsive-sm" id="calendar">
           <thead>
             <tr>
@@ -33,19 +40,55 @@
               <th>Saturday</th>
             </tr>
           </thead>
-
-          <tbody id="calendar-body">
-
-          </tbody>
+          <tbody id="calendar-body"></tbody>
         </table>
 
-
-
-
+        <!-- ── Desktop nav buttons + jump form ── -->
+        <div class="form-inline">
+          <button class="btn btn-outline-primary col-sm-6" id="today"
+            onclick="goToToday(); populateGoogleCal()">Today</button>
+          <button class="btn btn-outline-primary col-sm-6" id="previous"
+            onclick="previous(); populateGoogleCal();">Previous</button>
+          <button class="btn btn-outline-primary col-sm-6" id="next" onclick="next(); populateGoogleCal()">Next</button>
+        </div>
         <br />
+        <form class="form-inline">
+          <label class="lead mr-2 ml-2" for="month">Jump To: </label>
+          <select class="form-control col-sm-4" name="month" id="month" onchange="jump(); populateGoogleCal()"></select>
+          <label for="year"></label>
+          <select class="form-control col-sm-4" name="year" id="year" onchange="jump(); populateGoogleCal()">
+            <option value=2024>2024</option>
+            <option value=2025>2025</option>
+            <option value=2026>2026</option>
+            <option value=2027>2027</option>
+            <option value=2028>2028</option>
+            <option value=2029>2029</option>
+            <option value=2030>2030</option>
+          </select>
+        </form>
 
-      </div>
+        <!-- ── Mobile nav bar ── -->
+        <div class="mobile-nav">
+          <button onclick="previous(); populateGoogleCal();">&#8592;</button>
+          <h3 id="monthAndYearMobile"></h3>
+          <button onclick="next(); populateGoogleCal()">&#8594;</button>
+        </div>
 
+        <!-- ── Mobile toolbar: view toggle + today button ── -->
+        <div class="mobile-toolbar">
+          <div class="view-toggle-group">
+            <button class="view-toggle-btn" id="btn-upcoming" onclick="setMobileView('upcoming')">Next 3 Days</button>
+            <button class="view-toggle-btn" id="btn-full" onclick="setMobileView('full')">Full Month</button>
+          </div>
+          <button class="mobile-today-btn" onclick="mobileGoToToday()">Today</button>
+        </div>
+
+        <!-- ── Mobile list view ── -->
+        <div id="mobile-view"></div>
+
+      </div><!-- /.card -->
+
+      <!-- ── Sidebar ── -->
       <aside class="sidecol">
         <div class="card">
           <h4 class="card-header">Looking for something specific?</h4>
@@ -53,7 +96,7 @@
             <input type="text" id="myInput" onkeyup="searchCal()" placeholder="Search for events...">
             <p><strong>Event Demographics</strong></p>
             <p><label class="switch" id="babies-toggle"><input type="checkbox"><span
-                  class="slider round"></span></label>&emsp;Babies & Littles</p>
+                  class="slider round"></span></label>&emsp;Babies &amp; Littles</p>
             <p><label class="switch" id="kids-toggle"><input type="checkbox"><span
                   class="slider round"></span></label>&emsp;Kids</p>
             <p><label class="switch" id="tweens-toggle"><input type="checkbox"><span
@@ -65,66 +108,48 @@
             <p><small></small></p>
           </div>
         </div>
-        <form class="form-inline">
-          <label class="lead mr-2 ml-2" for="month">Jump To: </label>
-          <select class="form-control col-sm-4" name="month" id="month" onchange="jump(); populateGoogleCal()">
-          </select>
-
-
-          <label for="year"></label><select class="form-control col-sm-4" name="year" id="year"
-            onchange="jump(); populateGoogleCal()">
-            <option value=2024>2024</option>
-            <option value=2025>2025</option>
-            <option value=2026>2026</option>
-            <option value=2027>2027</option>
-            <option value=2028>2028</option>
-            <option value=2029>2029</option>
-            <option value=2030>2030</option>
-          </select>
-        </form>
-        <button class="btn btn-outline-primary col-sm-6" id="previous"
-          onclick="previous(); populateGoogleCal();">Previous</button>
-        <button class="btn btn-outline-primary col-sm-6" id="today"
-          onclick="goToToday(); populateGoogleCal()">Today</button>
-        <button class="btn btn-outline-primary col-sm-6" id="next" onclick="next(); populateGoogleCal()">Next</button>
       </aside>
+    </div><!-- /.layout -->
+  </div>
+
+  <div id="rR"></div>
+
+  <!-- ── Event detail modal ── -->
+  <div id="event-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title-text">
+    <div id="event-modal" style="position:relative;">
+      <div class="modal-drag-handle"></div>
+      <button class="modal-close-btn" onclick="closeEventModal()" aria-label="Close">&#x2715;</button>
+      <span id="modal-category-badge" class="modal-category-badge"></span>
+      <div id="modal-title-text" class="modal-title"></div>
+      <div id="modal-time" class="modal-time"></div>
+      <div class="modal-divider"></div>
+      <div id="modal-description" class="modal-description"></div>
+      <a id="modal-gcal-link" class="modal-gcal-link" href="#" target="_blank" rel="noopener">
+        📅 &nbsp;Open in Google Calendar
+      </a>
     </div>
   </div>
-  <!--<button name="jump" onclick="jump()">Go</button>-->
-
-
-  </p>
-  <div id="rR"></div>
 
   <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
   <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
   <script src="./components/calendarview.js"></script>
-  <!-- month/year dropdown population moved into DOMContentLoaded handler above -->
 
   <script>
+    /* ── Tooltip init (desktop) ── */
     function initTooltips() {
       document.querySelectorAll('.event-summary').forEach(el => {
         el.style.cursor = 'pointer';
         el.style.textDecoration = 'underline';
-
-        // If this element already has a tippy instance, destroy it first
-        if (el._tippy) {
-          el._tippy.destroy();
-        }
-
+        if (el._tippy) el._tippy.destroy();
         tippy(el, {
           allowHTML: true,
           content(reference) {
             const parent = reference.parentElement;
-            const link = eventLinkMap.get(parent);
-            const summary = parent.querySelector('.event-summary')?.textContent;
+            const summary = parent.querySelector('.event-summary')?.innerHTML;
             const time = parent.querySelector('.event-time')?.textContent;
             const description = parent.querySelector('.event-description')?.innerHTML;
-
             return `
-              <div class="tooltip-summary">
-                <a href="${link}" target="_blank">${summary}</a>                
-              </div>
+              <div class="tooltip-summary">${summary}</div>
               <div class="tooltip-time">${time}</div>
               <hr />
               <div class="tooltip-description">${description}</div>
@@ -139,7 +164,76 @@
       });
     }
 
+    /* ── Modal logic ── */
+    const CATEGORY_LABELS = {
+      babies: "Babies & Littles",
+      kids: "Kids",
+      tweens: "Tweens",
+      teens: "Teens",
+      adult: "Adults",
+      intergen: "All Ages",
+    };
+
+    function openEventModal(eventData) {
+      document.getElementById("modal-title-text").textContent = eventData.summary || "";
+      document.getElementById("modal-time").textContent = eventData.timeRange || "";
+      document.getElementById("modal-description").innerHTML = eventData.description || "";
+
+      const badge = document.getElementById("modal-category-badge");
+      badge.textContent = CATEGORY_LABELS[eventData.category] || "All Ages";
+      badge.className = "modal-category-badge " + (eventData.category || "intergen");
+
+      const link = document.getElementById("modal-gcal-link");
+      if (eventData.htmlLink) {
+        link.href = eventData.htmlLink;
+        link.style.display = "flex";
+      } else {
+        link.style.display = "none";
+      }
+
+      const overlay = document.getElementById("event-modal-overlay");
+      overlay.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeEventModal() {
+      document.getElementById("event-modal-overlay").classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    /* ── Mobile view mode: 'upcoming' (default) or 'full' ── */
+    window.mobileViewMode = 'upcoming';
+
+    function setMobileView(mode) {
+      window.mobileViewMode = mode;
+      document.getElementById('btn-upcoming').classList.toggle('active', mode === 'upcoming');
+      document.getElementById('btn-full').classList.toggle('active', mode === 'full');
+      // re-render with the cached event list if available
+      if (window._lastParsedEvents) {
+        buildMobileView(window._lastParsedEvents);
+        if (typeof searchCal === 'function') searchCal();
+      }
+    }
+
+    function mobileGoToToday() {
+      // jump the desktop calendar to today's month
+      goToToday();
+      populateGoogleCal();
+      // switch back to upcoming view
+      setMobileView('upcoming');
+    }
+
+    /* close on backdrop tap */
+    document.getElementById("event-modal-overlay").addEventListener("click", function (e) {
+      if (e.target === this) closeEventModal();
+    });
+
+    /* close on Escape */
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") closeEventModal();
+    });
   </script>
+
   <script src="./components/populateCalendar.js"></script>
 </body>
 
