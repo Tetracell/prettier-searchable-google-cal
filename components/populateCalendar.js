@@ -1,6 +1,8 @@
 // await --- before we can continue, we have to wait for the response from another computer/the server
 //res = response
 
+const eventLinkMap = new Map();
+
 async function populateGoogleCal() {
   var selectMonth = document.getElementById("month");
   var selectYear = document.getElementById("year");
@@ -102,19 +104,20 @@ function AssignCalEvents(res) {
     const month = String(startDateTime.getMonth() + 1).padStart(2, "0");
     const day = String(startDateTime.getDate()).padStart(2, "0");
     const dateId = `date-${year}-${month}-${day}`;
-
+    
+    
     /**
      * requestAnimationFrame (rAF) is a browser API that says "run this callback right before the next visual repaint." It essentially lets you tap into the browser's rendering pipeline.
      * First rAF — waits for the browser to finish processing the current batch of DOM changes and prepares for the next paint
      * Second rAF — waits for the paint itself to fully complete
      * By the time the second callback fires, the browser has fully committed every appendChild to the DOM, so querySelectorAll sees all 60 elements instead of just the first 50-ish.
-     */
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        initTooltips();
+    */
+   requestAnimationFrame(() => {
+     requestAnimationFrame(() => {
+       initTooltips();
       });
     });
-
+    
     // Extract and format times
     const startTime = startDateTime.toLocaleTimeString("en-US", {
       hour: "2-digit",
@@ -127,12 +130,13 @@ function AssignCalEvents(res) {
       minute: "2-digit",
       hour12: true,
     });
-
+    
     // Find the matching calendar cell
     const cell = document.getElementById(dateId);
     if (cell) {
       // Create event container
       const eventEl = document.createElement("div");
+      eventLinkMap.set(eventEl, event.htmlLink); // Store the event's HTML link in the map for later retrieval
       eventEl.className = "event-item";
       // apply category-specific id if one is determined
       const cat = getCategoryClass(event.summary);
@@ -140,7 +144,7 @@ function AssignCalEvents(res) {
         eventEl.classList.add(cat);
       }
       eventEl.innerHTML = `
-            <div class="event-summary">${event.summary}</div>
+            <div class="event-summary">${event.summary}</div></a>
             <div class="event-time">${startTime} - ${endTime}</div>
             <div class="event-description">${event.description}</div>
           `;
