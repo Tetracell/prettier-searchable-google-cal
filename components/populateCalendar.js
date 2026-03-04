@@ -177,9 +177,23 @@ function buildMobileView(events) {
 
   // Update the mobile month/year heading
   const mobileHeading = document.getElementById("monthAndYearMobile");
-  const desktopHeading = document.getElementById("monthAndYear");
-  if (mobileHeading && desktopHeading) {
-    mobileHeading.textContent = desktopHeading.textContent;
+  if (mobileHeading) {
+    const MONTH_NAMES_FULL = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    mobileHeading.textContent =
+      MONTH_NAMES_FULL[currentMonth] + " " + currentYear;
   }
 
   // Sync active button state
